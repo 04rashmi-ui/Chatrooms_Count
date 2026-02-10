@@ -1,0 +1,174 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  color: white;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+/* ================= PARTICLES ================= */
+#bgCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ================= GLITCH ================= */
+#glitch {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 90px;
+  font-weight: bold;
+  animation: glitch 1s infinite;
+  z-index: 10;
+}
+
+@keyframes glitch {
+  0% { text-shadow: 2px 0 red; }
+  50% { text-shadow: -2px 0 cyan; }
+  100% { text-shadow: 2px 0 magenta; }
+}
+
+/* ================= COUNTDOWN ================= */
+#countdown {
+  position: fixed;
+  top: 130px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  z-index: 10;
+}
+
+/* ================= LOGIN ================= */
+#login-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.login-box {
+  background: rgba(0,0,0,0.85);
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ================= APP ================= */
+#app {
+  display: none;
+  z-index: 20;
+}
+
+/* ================= CHAT ================= */
+#chat-container {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 320px;
+  height: 70vh;
+  background: rgba(0,0,0,0.85);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+}
+
+#chat-header {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  background: #111;
+}
+
+#messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.message {
+  margin-bottom: 8px;
+  animation: twitchFloat 0.35s ease-out;
+}
+
+@keyframes twitchFloat {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+#input-bar {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+}
+
+/* ================= REACTIONS ================= */
+#reactions,
+#reaction-layer {
+  display: none;
+}
+
+#reactions {
+  position: fixed;
+  left: 50%;
+  bottom: 25%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+  z-index: 30;
+}
+
+#reactions button {
+  font-size: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+#reaction-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 40;
+}
+
+.floating {
+  position: fixed;
+  bottom: 0;
+  font-size: 36px;
+  animation: floatUp 4s linear forwards;
+}
+
+@keyframes floatUp {
+  to {
+    transform: translateY(-500px);
+    opacity: 0;
+  }
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 600px) {
+  #chat-container {
+    width: 95vw;
+    left: 50%;
+    transform: translateX(-50%);
+    right: auto;
+  }
+}
