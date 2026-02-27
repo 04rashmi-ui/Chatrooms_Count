@@ -21,15 +21,46 @@ const db = firebase.database();
 let currentRoom = null;
 let manualLoginDone = false;
 
+
+const USER_COLORS = [
+  "#FF0000", "#0000FF", "#00AA00", "#B22222",
+  "#FF7F50", "#9ACD32", "#FF4500", "#2E8B57",
+  "#DA70D6", "#FFD700", "#1E90FF", "#FF69B4"
+];
+
+// Generate a consistent color based on UID
+function generateColorFromUID(uid) {
+  let hash = 0;
+  for (let i = 0; i < uid.length; i++) {
+    hash = uid.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return USER_COLORS[Math.abs(hash) % USER_COLORS.length];
+}
 /***********************
  * AUTH
  ***********************/
 auth.onAuthStateChanged(user => {
   if (!user) return;
-  if (manualLoginDone && currentRoom) {
-    connectRoom(currentRoom);
-    listenForReactions(currentRoom);
-  }
+if (manualLoginDone && currentRoom) {
+
+  const uid = user.uid;
+  const userRef = db.ref("users/" + uid);
+
+  userRef.once("value").then(snap => {
+    if (!snap.exists()) {
+      // First time user → assign color
+      const color = generateColorFromUID(uid);
+
+      userRef.set({
+        username: localStorage.getItem("username"),
+        color: color
+      });
+    }
+  });
+
+  connectRoom(currentRoom);
+  listenForReactions(currentRoom);
+}
 });
 
 /***********************
@@ -46,7 +77,7 @@ window.login = function () {
   }
 
   const passwords = {
-    friends: "friends@123",
+    friends: "friends123",
     family: "family123",
     others: "others123"
   };
@@ -133,9 +164,19 @@ function renderMessage(user, text, uid) {
       ? localStorage.getItem("username")
       : user;
 
-  div.innerHTML = `<strong>${displayName}:</strong> ${text}`;
-  messages.appendChild(div);
-  messages.scrollTop = messages.scrollHeight;
+  // Get user's color from database
+  db.ref("users/" + uid + "/color").once("value").then(snap => {
+    const color = snap.val() || "#ffffff";
+
+    div.innerHTML = `
+      <strong style="color:${color}">
+        ${displayName}:
+      </strong> ${text}
+    `;
+
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  });
 }
 
 window.clearChat = function () {
@@ -252,4 +293,3 @@ function animate() {
   requestAnimationFrame(animate);
 }
 animate();
-
