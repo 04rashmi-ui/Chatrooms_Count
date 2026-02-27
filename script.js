@@ -46,7 +46,7 @@ window.login = function () {
   }
 
   const passwords = {
-    friends: "friends123",
+    friends: "friends@123",
     family: "family123",
     others: "others123"
   };
@@ -252,3 +252,4 @@ function animate() {
   requestAnimationFrame(animate);
 }
 animate();
+
